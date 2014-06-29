@@ -2,34 +2,34 @@ require "erb_generator"
 
 class HTMLGenerator < ERBGenerator #HTMLgenerator inherits properties from ERBgenerator
 
+  def initialize(wrapper = nil)
+    @wrapper = wrapper
+  end
 
- def section(text)
-  template = "<section><%= some_text %></section>" #creating a string of text that will do the html that I want
-  options_hash = {:locals => {:some_text => text}} #section_texts match, name of the parameter does not go through
-  erb(template, options_hash) #erb defines the how
+  def section(text)
+    template = "<section><%= some_text %></section>" #creating a string of text that will do the html that I want
+    options_hash = {:locals => {:some_text => text}, layout: @wrapper} #section_texts match, name of the parameter does not go through
+    erb(template, options_hash) #erb defines the how
+  end
 
-end
+    def unordered_list(list)
+      template = <<-TEMPLATE
+      <ul>
+        <% kitchen_edibles.each do |item| %>
+        <li> <%= item %> </li>
+        <% end %>
+      </ul>
+      TEMPLATE
 
-    def unordered_list(items)
-    template = <<-TEMPLATE
-  <ul>
-    <% html_items.each do |item| %>
-       <li><%= item %></li>
-    <% end %>
-  </ul>
-    TEMPLATE
-
-      erb(template, {:locals => {:html_items => items}})
+      erb(template, {:locals => {:kitchen_edibles => items}, layout: @wrapper})
     end
+ end
 
- end 
-
-
-
-
-
-
-
+def button(text, class_hash = nil)
+  template = "<button class='flashy_class'>flashy-button</button>"
+  options_hash = {:locals => {:some_text => text}, layout: @wrapper}
+  erb(template, options_hash)
+end
 
 
 #you can change the section_text to anything, as long as they match
